@@ -1,0 +1,33 @@
+
+{% include 'header.html' %}
+<div class="container">
+
+	<h1>Shiny palm tree</h1>
+	<div class="col-md-6">
+		<h2> Lorem ipsum</h2>
+		<p>jdsadsadsafaf</p>
+	</div>
+	<div class="col-md-6"><h2>{{ month }} {{ year }}</2>
+		<table class="table table-bordered">
+			<tr>
+				<th>Mon</th>
+				<th>Tue</th>
+				<th>Wed</th>
+				<th>Thu</th>
+				<th>Fri</th>
+				<th>Sat</th>
+				<th>Sun</th>
+			</tr>
+			{% for week in range(0,6) %}
+			<tr>
+				{% for day in range(0,7) %}
+				<td>{% if week==0 and days[0]==day %}{{ i }}{% elif (week==0 and day>days[0]) or (week>0 and week*7+day-days[0]+i<=days[1]) %}{{ week*7+day-days[0]+i }}{% endif %}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+
+</div>
+
+{% include 'footer.html' %}
