@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Shiny Palm Tree</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="container">
+			<div class="col-md-12">
+				<h1>Shiny Palm Tree</h1>
+				{% block header %}{% endblock %}
+			</div>
+
+			<div class="col-md-12 bg-light">
+				<ul class="nav justify-content-end">
+					{% if g.user %}
+  					<li class="nav-item">
+    						<a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
+  					</li>
+					{% else %}
+  					<li class="nav-item">
+    						<a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+  					</li>
+  					<li class="nav-item">
+    						<a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
+  					</li>
+					{% endif %}
+				</ul>
+			</div>
+
+			<div class="col-md-12">
+				{% block content %}{% endblock %}
+			</div>
+
+			<div class="col-md-12">
+				<hr>
+				<p class="text-center">This is the footer</p>
+			</div>
+		</div>
+	</body>
+</html>
