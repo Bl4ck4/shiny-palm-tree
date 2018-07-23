@@ -1,0 +1,4 @@
+include palmtree/schema.sql
+graft palmtree/static
+graft palmtree/templates
+gloal-exclude *.pyc
