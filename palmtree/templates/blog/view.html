@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h3>View post</h3>
+{% endblock %}
+
+{% block content%}
+	
+	{% if g.user %}
+	<div class="row">
+		<div class="col">
+			<p>
+				<a href="{{ url_for('index') }}">Back</a>
+			</p>
+		</div>
+	
+		<div class="col">
+			<p class="text-right">
+				<a href="{{ url_for('blog.create') }}">New</a>
+			</p>
+		</div>
+	</div>
+	{% else %}
+	<p>
+		<a href="{{ url_for('index') }}">Back</a>
+	</p>
+	{% endif %}
+	
+	{% include 'blog/post.html'%}
+{% endblock%}
