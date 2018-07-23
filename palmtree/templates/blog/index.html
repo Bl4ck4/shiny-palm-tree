@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+	<h3>Blog</h3>
+{% endblock %}
+
+{% block content%}
+	{% if g.user %}
+	<p class="text-right">
+		<a href="{{ url_for('blog.create') }}">New</a>
+	</p>
+	{% endif %}
+
+	{% for post in posts %}
+		<div class="card">
+			<div class="card-header">
+				<h5>{{ post['title'] }}</h5>
+				<p>by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</p>
+			</div>
+			<div class="card-body">
+				{% if g.user['id'] == post['author_id'] %}
+				<p class="text-right">
+					<a href="{{ url_for('blog.update', id=post['id'])}}">Edit</a>
+				</p>
+				{% endif %}
+				<pre><p>{{ post['body'] }}</p></pre>
+			</div>
+		</div>
+	{% endfor %}
+{% endblock%}
