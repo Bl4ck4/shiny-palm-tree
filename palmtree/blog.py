@@ -16,7 +16,12 @@ def index():
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+    comments = db.execute(
+	    'SELECT c.id, post_id, author_id, created, comment, likes, dislikes, username'
+		' FROM comment c JOIN user u ON c.author_id = u.id'
+		' ORDER BY created'
+	).fetchall()
+    return render_template('blog/index.html', posts=posts, comments=comments)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -42,6 +47,26 @@ def create():
             return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
+
+@bp.route('/<int:post_id>/comment', methods=('POST',))
+def comment(post_id):
+	comment = request.form['comment']
+	error = None
+
+	if not comment:
+		error = 'Comment is required.'
+
+	if error is not None:
+		flash(error)
+	else:
+		db = get_db()
+		db.execute(
+			'INSERT INTO comment (post_id, author_id, comment, likes, dislikes)'
+			' VALUES (?, ?, ?, 0, 0)',
+			(post_id, g.user['id'], comment)
+		)
+		db.commit()
+		return redirect(url_for('blog.index'))
 
 def get_post(id, check_author=True):
     post = get_db().execute(
@@ -91,8 +116,8 @@ def view(id):
 	post = get_post(id,False)
 	return render_template('blog/view.html',post=post)
 
-@bp.route('/<int:id>/like', methods=('POST',))
-def status(id):
+@bp.route('/<int:id>/status', methods=('POST',))
+def statuspost(id):
 	db = get_db()
 	if request.form['status'] == 'Like':
 		db.execute(
@@ -103,7 +128,21 @@ def status(id):
 	else:
 		flash('Unknown status.')
 	db.commit()
-	return redirect(url_for('blog.view', id=id))
+	return redirect(url_for('blog.index'))
+
+@bp.route('/<int:id>/status', methods=('POST',))
+def statuscomment(id):
+	db = get_db()
+	if request.form['status'] == 'Like':
+		db.execute(
+			'UPDATE comment SET likes = likes+1 WHERE id = ?', (id,))
+	elif request.form['status'] == 'Dislike':
+		db.execute(
+			'UPDATE comment SET dislikes = dislikes+1 WHERE id = ?', (id,))
+	else:
+		flash('Unknown status.')
+	db.commit()
+	return redirect(url_for('blog.index'))
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required

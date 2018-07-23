@@ -6,42 +6,14 @@
 
 {% block content%}
 	{% if g.user %}
-	<p class="text-right">
-		<a href="{{ url_for('blog.create') }}">New</a>
-	</p>
+		<p class="text-right">
+			<a href="{{ url_for('blog.create') }}">New</a>
+		</p>
 	{% endif %}
 
 	{% for post in posts %}
-	<p>
-		<div class="card">
-			<div class="card-header">
-				<h5><a href="{{ url_for('blog.view', id=post['id']) }}">{{ post['title'] }}</a></h5>
-				<p><i style="font-size: 10px;">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</i></p>
-			</div>
-			<div class="card-body">
-				{% if g.user['id'] == post['author_id'] %}
-				<p class="text-right">
-					<a href="{{ url_for('blog.update', id=post['id'])}}">Edit</a>
-				</p>
-				{% endif %}
-				<pre><p>{{ post['body'] }}</p></pre>
-			</div>
-			<div card="card-footer">
-				<hr>
-				<div class="row">
-					<div class="col text-right">
-						<form action="{{ url_for('blog.status', id=post['id']) }}" method="POST">
-							<button class="btn btn-outline-success" type="submit" name="status" value="Like">{{ post['likes'] }} Like</button>
-						</form>
-					</div>
-				<div class="col">
-						<form action="{{ url_for('blog.status', id=post['id']) }}" method="POST">
-							<button class="btn btn-outline-warning" type="submit" name="status" value="Dislike">{{ post['dislikes'] }} Dislike</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</p>
+		<p>
+			{% include 'blog/post.html' %}
+		</p>
 	{% endfor %}
 {% endblock%}
