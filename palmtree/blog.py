@@ -116,7 +116,7 @@ def view(id):
 	post = get_post(id,False)
 	return render_template('blog/view.html',post=post)
 
-@bp.route('/<int:id>/status', methods=('POST',))
+@bp.route('/<int:id>/statuspost', methods=('POST',))
 def statuspost(id):
 	db = get_db()
 	if request.form['status'] == 'Like':
@@ -130,7 +130,7 @@ def statuspost(id):
 	db.commit()
 	return redirect(url_for('blog.index'))
 
-@bp.route('/<int:id>/status', methods=('POST',))
+@bp.route('/<int:id>/statuscomment', methods=('POST',))
 def statuscomment(id):
 	db = get_db()
 	if request.form['status'] == 'Like':
